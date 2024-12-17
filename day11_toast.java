@@ -20,7 +20,7 @@ public class day11_toast {
             stones.add(scan.nextLong());
         }
 
-        int numBlinks = 25;
+        int numBlinks = 75;
         double countStones = 0;
         for (int j = 0; j < stones.size(); j++) {
             countStones += blink25(stones.get(j), numBlinks, 0);
