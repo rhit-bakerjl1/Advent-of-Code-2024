@@ -44,7 +44,7 @@ public class day17 {
         // nextLine was the last line!
         String goalCommand = nextLine.substring(9);
         System.out.println(goalCommand);
-        int newRegA = getFirstRegA(commands, regB, regC, goalCommand);
+        long newRegA = getFirstRegA(commands, regB, regC, goalCommand);
 
         String output = getOutput(commands, regA, regB, regC);
         System.out.println("Output: " + output);
@@ -78,6 +78,8 @@ public class day17 {
                 output += indOut[1];
                 if (output.length() > goalString.length() || !output.equals(goalString.substring(0,output.length()))) {
                     return "";
+                } else if (output.length() >= 23) {
+                    System.out.println("Started with regA = " + regA + ", output = " + output);
                 }
                 output += ",";
             }
@@ -87,15 +89,27 @@ public class day17 {
         return output;
     }
 
-    public static int getFirstRegA(ArrayList<Integer> commands, int regB, int regC, String goalString) {
-        for (int i = 560000000; i < Integer.MAX_VALUE; i++) {
+    public static long getFirstRegA(ArrayList<Integer> commands, int regB, int regC, String goalString) {
+        long bigNum = 100000000;
+        long numsCounted = 0;
+        for (long i = (long)1143609146868.0; i < Long.MAX_VALUE; i+= 524288) {
+            numsCounted++;
+            if (numsCounted % 2 == 0) {
+                i -= 524288;
+                i += 804782080;
+            }
+            if (numsCounted % 4 == 0) {
+                i -= 804782080;
+                i += (long)67913646080.0;
+            }
         // for (int i = 0; i < Integer.MAX_VALUE; i++) {
             String myOutput = getOutputStop(commands, i, regB, regC, goalString);
             if (goalString.equals(myOutput)) {
                 return i;
             }
-            if (i % 20000000 == 0) {
-                System.out.println("Not zero through " + i);
+            while (i > bigNum) {
+                System.out.println("We have breached " + bigNum);
+                bigNum *= 10;
             }
         }
         return -1;
@@ -176,7 +190,7 @@ public class day17 {
         return returnArr;
     }
 
-    public static int bitXOR(long num1, long num2) {
+    public static long bitXOR(long num1, long num2) {
         int[] bin1 = int2Binary(num1);
         int[] bin2 = int2Binary(num2);
         // Adjust lengths
@@ -210,11 +224,11 @@ public class day17 {
         return binary2Int(returnBin);
     }
 
-    public static int binary2Int(int[] binaryNum) {
-        int sum = 0;
+    public static long binary2Int(int[] binaryNum) {
+        long sum = 0;
         for (int i = 0; i < binaryNum.length; i++) {
             int index = binaryNum.length - 1 - i;
-            sum += (int)(Math.pow(2,i)*binaryNum[index]);
+            sum += (long)(Math.pow(2,i)*binaryNum[index]);
         }
         return sum;
     }
