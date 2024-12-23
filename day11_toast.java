@@ -3,7 +3,13 @@ import java.util.*;
 
 // We're toast!
 public class day11_toast {
+    public static HashMap<Long, Long> stored25;
+    public static HashMap<Long, Long> stored50;
+
     public static void main(String[] args) {
+        stored25 = new HashMap<Long, Long>();
+        stored50 = new HashMap<Long, Long>();
+
         long startTime = System.nanoTime();
         File day11_input = new File("day11.txt");
         // Scan the data
@@ -36,6 +42,21 @@ public class day11_toast {
 
     // Returns two integers, being the first and second number. -1 means no second number.
     public static long blink25(long stoneNum, int goalBlink, int currBlink) {
+        if (currBlink == 50) {
+            try {
+                long my25 = stored25.get(stoneNum);
+                return my25;
+            } catch (Exception e) {
+            }
+        }
+        if (currBlink == 25) {
+            try {
+                long my50 = stored50.get(stoneNum);
+                return my50;
+            } catch (Exception e) {
+            }
+        }
+
         if (currBlink >= goalBlink) {
             return 1;
         }
@@ -67,12 +88,16 @@ public class day11_toast {
 
         currBlink+= blinksAtATime;
         if (currBlink >= goalBlink)  {
+            stored25.put(stoneNum, (long)myStones.size());
             return myStones.size();
         } 
 
         long mySum = 0;
         for (int i = 0; i < myStones.size(); i++) {
             mySum += blink25(myStones.get(i), goalBlink, currBlink);
+        }
+        if (currBlink == 50) {
+            stored50.put(stoneNum, mySum);
         }
         return mySum;
     }
